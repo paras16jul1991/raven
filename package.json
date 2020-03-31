@@ -4,14 +4,13 @@
   "scripts": {
     "ng": "ng",
     "start": "node server.js"
-    },
+  },
   "private": true,
   "dependencies": {
     "body-parser": "^1.19.0",
+    "debug": "^4.1.1",
     "express": "^4.17.1",
-    "mongoose": "^5.9.7",
-    "tslib": "^1.10.0",
-    "zone.js": "~0.10.2"
+    "mongoose": "^5.9.7"
   },
   "devDependencies": {
     "nodemon": "^2.0.2",
