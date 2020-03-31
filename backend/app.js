@@ -1,5 +1,15 @@
 const express = require('express');
 const bodyparser = require('body-parser');
+const mongoos = require('mongoose');
+
+mongoos.connect("mongodb://raven:raven123@ds017514.mlab.com:17514/heroku_3n6jhnlx", { useNewUrlParser: true , useUnifiedTopology: true })
+.then(()=>{ console.log('Connection established with Mongo DB')})
+.catch((e)=>{
+    console.log('Connection failed ');
+});
+
+const Post = require('./models/post');
+
 const app = express();
 
 app.use(bodyparser.json());
@@ -14,29 +24,39 @@ app.use((req,res,next)=>{
 
 
 app.post("/api/posts",(req,res,next)=>{
-    const post =  req.body;
+    const post =  new Post( {title : req.body.title, content : req.body.content});
     console.log(post);
-    res.status(201).json({message:"Post created successfully"});    
+    post.save().then((result)=>{
+        console.log(result);
+        res.status(201).json({message:"Post created successfully", postid : result._id}); 
+    });
 });
 
 
 app.get("/api/posts",(req,res,next)=>{
     console.log("Inside second middleware");
-    posts = [{
-        'title' : 'Title 1 ',
-        'content' : 'content 1',
-        'id' : 'afsasdfasdf'
-    },
-    {
-        'title' : 'Title 2 ',
-        'content' : 'content 2',
-        'id' : 'af12342134sasdfasdfsafasdf'
-    }]; 
+    Post.find().then((documents)=>{
+        res.status(200).json({
+            'message' : 'Posts fetched successfully',
+             'posts' : documents
+        });
+    }).catch(()=>{
+        console.log("No record found from Mongo");
+        res.status(200).json({
+            'message' : 'Posts fetched successfully',
+             'posts' : [] 
+        });
+    });
 
-     res.status(200).json({
-         'message' : 'Posts fetched successfully',
-          'posts' : posts 
-     });
+     
 });
+
+app.delete('/api/posts/:id', (req , res, next) => {
+    console.log('deleting  id : ',req.params.id);
+    Post.deleteOne( { _id : req.params.id } ).then( result => {
+            console.log(" Result "+ result);    
+            res.status(200).json( { message : 'Post deleted' } );
+        });
+} );
 
 module.exports = app;
