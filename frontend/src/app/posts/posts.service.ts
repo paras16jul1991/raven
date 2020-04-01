@@ -3,6 +3,9 @@ import { Injectable } from '@angular/core';
 import { Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { map } from "rxjs/operators";
+import { environment }  from "../../environments/environment";
+ 
+const backEndUrl = environment.apiUrl +'/posts';
 
 @Injectable({providedIn : 'root'})
 export class PostsService{
@@ -17,7 +20,7 @@ export class PostsService{
 
         getPosts(){
             this.http.get<{message : string , posts : any }>
-            ("http://localhost:3000/api/posts")
+            ( backEndUrl )
             .pipe( map((postdata) => {
                  return postdata.posts.map(post =>{
                         return {
@@ -38,7 +41,7 @@ export class PostsService{
 
         addPost(id : string , title : string , content : string){
             const post : Post = {id : id , title :title, content : content};
-            this.http.post<{message : string, postid : string }>("http://localhost:3000/api/posts",post).subscribe((x)=>{
+            this.http.post<{message : string, postid : string }>( backEndUrl ,post).subscribe((x)=>{
                 console.log(x.message);
                 post.id = x.postid;
                 this.posts.push(post);
@@ -50,7 +53,7 @@ export class PostsService{
 
 
         deletePost(id : string ){
-            this.http.delete("http://localhost:3000/api/posts/"+ id).subscribe(()=>{
+            this.http.delete(backEndUrl + "/" + id).subscribe(()=>{
                 console.log("Post deleted  "+id);
                 const  updatedPost = this.posts.filter(x => x.id != id);
                 this.posts = updatedPost;
@@ -59,7 +62,7 @@ export class PostsService{
         }
 
         onEdit(post : Post){
-            this.http.put("http://localhost:3000/api/posts/",post);
+            this.http.put(backEndUrl ,post);
         }
 
         getPostupdateListener(){

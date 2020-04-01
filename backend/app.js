@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyparser = require('body-parser');
 const mongoos = require('mongoose');
+const path  = require('path');
 
 mongoos.connect("mongodb://raven:raven123@ds017514.mlab.com:17514/heroku_3n6jhnlx", { useNewUrlParser: true , useUnifiedTopology: true })
 .then(()=>{ console.log('Connection established with Mongo DB')})
@@ -13,6 +14,8 @@ const Post = require('./models/post');
 const app = express();
 
 app.use(bodyparser.json());
+
+app.use("/",express.static(path.join(__dirname,"raven_ui")));
 
 app.use((req,res,next)=>{
     console.log("Inside first middleware");
@@ -58,5 +61,9 @@ app.delete('/api/posts/:id', (req , res, next) => {
             res.status(200).json( { message : 'Post deleted' } );
         });
 } );
+
+app.use( (req, res, next)=>{
+    res.sendFile(path.join( __dirname,'raven_ui','index.html'));
+});
 
 module.exports = app;
