@@ -51,6 +51,11 @@ export class PostsService{
 
         }
 
+        getPost(id : string){
+            return this.http.get<{_id : string , title : string, content : string }>
+            ( backEndUrl+ '/'+id);
+        }
+
 
         deletePost(id : string ){
             this.http.delete(backEndUrl + "/" + id).subscribe(()=>{
@@ -61,8 +66,16 @@ export class PostsService{
             });
         }
 
-        onEdit(post : Post){
-            this.http.put(backEndUrl ,post);
+        updatePost(id: string , title : string , content : string){
+            const post = { id : id , title : title, content : content };
+            this.http.put(backEndUrl+'/'+ id, post).subscribe(x => {
+                console.log("Post updated  "+ id);
+                const updatedPost = [...this.posts];
+                const  updatedPostIndex = this.posts.findIndex( p => p.id == id);
+                updatedPost[updatedPostIndex] = post;  
+                this.posts = updatedPost;
+                this.postSUpdated.next([...this.posts]);
+            });
         }
 
         getPostupdateListener(){
