@@ -11,6 +11,7 @@ import { Post } from "../post.model";
 })
 export class PostCreateComponent implements OnInit {
 
+  isLoading= false;
   enteredTitle= ''; 
   enteredContent= '';
   private mode = 'create';
@@ -25,8 +26,10 @@ export class PostCreateComponent implements OnInit {
         if (map.has('postId')){
             this.mode = 'edit';
             this.postId = map.get('postId');
+            this.isLoading= true;
             this.service.getPost(this.postId).subscribe( x => {
               this.post = { id : x._id, title : x.title, content : x.content };
+              this.isLoading= false;
             });
         }else{
           this.mode  = 'create';
@@ -37,11 +40,14 @@ export class PostCreateComponent implements OnInit {
 
   onAddPost(form : NgForm): void{
     if(this.mode == 'edit')
-    this.service.updatePost(this.postId, form.value.enteredTitle, form.value.enteredContent);
-    else
+    { this.isLoading= true;
+      this.service.updatePost(this.postId, form.value.enteredTitle, form.value.enteredContent);
+    } 
+    else{
+      this.isLoading= true;
       this.service.addPost(null, form.value.enteredTitle, form.value.enteredContent);
-    
-    form.reset();
+    }
+      form.reset();
     }
 
 }

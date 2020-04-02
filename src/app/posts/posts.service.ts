@@ -4,13 +4,14 @@ import { Subject } from "rxjs";
 import { HttpClient } from "@angular/common/http";
 import { map } from "rxjs/operators";
 import { environment }  from "../../environments/environment";
+import { Router } from '@angular/router';
  
 const backEndUrl = environment.apiUrl +'/posts';
 
 @Injectable({providedIn : 'root'})
 export class PostsService{
 
-        constructor(private http : HttpClient ){
+        constructor(private http : HttpClient ,public router : Router){
             
         }
 
@@ -46,7 +47,9 @@ export class PostsService{
                 post.id = x.postid;
                 this.posts.push(post);
                 this.postSUpdated.next(this.posts);
+                this.router.navigate(["/"]);
             });
+            
             
 
         }
@@ -63,6 +66,7 @@ export class PostsService{
                 const  updatedPost = this.posts.filter(x => x.id != id);
                 this.posts = updatedPost;
                 this.postSUpdated.next([...this.posts]);
+                this.router.navigate(["/"]);
             });
         }
 
@@ -75,6 +79,7 @@ export class PostsService{
                 updatedPost[updatedPostIndex] = post;  
                 this.posts = updatedPost;
                 this.postSUpdated.next([...this.posts]);
+                this.router.navigate(["/"]);
             });
         }
 
