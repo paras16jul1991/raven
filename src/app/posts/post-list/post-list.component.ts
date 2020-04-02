@@ -16,10 +16,7 @@ export class PostListComponent implements OnInit , OnDestroy {
   constructor(public service : PostsService) {
    
    }
-  ngOnDestroy(): void {
-    this.postsSub.unsubscribe();
-  }
-
+ 
   onDelete(id : string){
     this.service.deletePost(id);
   }
@@ -32,4 +29,9 @@ export class PostListComponent implements OnInit , OnDestroy {
     this.service.getPosts();
     this.service.getPostupdateListener().subscribe((x : Post[])=> this.posts = x );
   }
+
+  ngOnDestroy(): void {
+  //  this.postsSub.unsubscribe();
+  }
+
 }
