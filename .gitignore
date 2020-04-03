@@ -3,9 +3,14 @@
 # compiled output
 /dist
 /tmp
-/backend/images
 /out-tsc
 /backend/raven_ui
+
+# exclude everything
+/backend/images/*
+
+# exception to the rule
+!/backend/images/.gitkeep 
 
 # Only exists if Bazel was run
 /bazel-out
