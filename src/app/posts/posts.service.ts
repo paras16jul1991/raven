@@ -40,10 +40,19 @@ export class PostsService{
             
         }
 
-        addPost(id : string , title : string , content : string){
-            const post : Post = {id : id , title :title, content : content};
-            this.http.post<{message : string, postid : string }>( backEndUrl ,post).subscribe((x)=>{
+        addPost(id : string , title : string , content : string, image : File){
+            const postData = new FormData();
+            postData.append("title",title);
+            postData.append("content",content);
+            postData.append("image",image, title);
+            
+            this.http.post<{message : string, postid : string }>( backEndUrl ,postData).subscribe((x)=>{
                 console.log(x.message);
+                const post : Post = { 
+                    id : x.postid,
+                    title : title,
+                    content : content
+                };
                 post.id = x.postid;
                 this.posts.push(post);
                 this.postSUpdated.next(this.posts);

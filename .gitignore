@@ -3,6 +3,7 @@
 # compiled output
 /dist
 /tmp
+/backend/images
 /out-tsc
 /backend/raven_ui
 
