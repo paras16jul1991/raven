@@ -13,9 +13,10 @@ export class PostListComponent implements OnInit , OnDestroy {
    isLoading = false;
    posts : Post[] = [];
    private postsSub : Subscription;
+   public searchText : any = '';
    
   constructor(public service : PostsService) {
-   
+  
    }
  
   onDelete(id : string){
@@ -23,6 +24,7 @@ export class PostListComponent implements OnInit , OnDestroy {
   }
 
   ngOnInit(): void {
+   // this.searchText = "test";
     this.isLoading= true;
     this.service.getPosts();
     this.service.getPostupdateListener().subscribe((x : Post[])=> {
