@@ -17,13 +17,16 @@ app.use(bodyparser.json());
 
 app.use("/",express.static(path.join(__dirname,"raven_ui")));
 
+app.use("/images",express.static(path.join(__dirname,"images")));
+
 app.use((req,res,next)=>{
-    console.log("Inside first middleware");
     res.setHeader("Access-Control-Allow-Origin","*");
     res.setHeader("Access-Control-Allow-MethodS","GET, POST , DELETE, PUT, OPTIONS, PATCH");
-    res.setHeader("Access-Control-Allow-Headers","Origin,Content-Type,Accept,X-Requested-With");
+    res.setHeader("Access-Control-Allow-Headers","Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Authorization");
     next();
 });
+
+
 
 app.use("/api/posts",postRoutes);
 

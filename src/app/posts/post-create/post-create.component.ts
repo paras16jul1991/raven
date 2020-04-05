@@ -3,6 +3,7 @@ import { PostsService } from '../posts.service';
 import { FormGroup, FormControl , Validators} from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Post } from "../post.model";
+import { tick } from '@angular/core/testing';
 
 @Component({
   selector: 'app-post-create',
@@ -36,12 +37,13 @@ export class PostCreateComponent implements OnInit {
             this.postId = map.get('postId');
             this.isLoading= true;
             this.service.getPost(this.postId).subscribe( x => {
-              this.post = { id : x._id, title : x.title, content : x.content };
+              this.post = { id : x._id, title : x.title, content : x.content , imagepath : x.imagepath};
               this.isLoading= false;
 
               this.form.setValue({
                 title : this.post.title,
-                content : this.post.content
+                content : this.post.content,
+                image : this.post.imagepath
               });
 
             });
@@ -55,7 +57,7 @@ export class PostCreateComponent implements OnInit {
   onAddPost(): void{
     if(this.mode == 'edit')
     { this.isLoading= true;
-      this.service.updatePost(this.postId, this.form.value.title, this.form.value.content);
+      this.service.updatePost(this.postId, this.form.value.title, this.form.value.content, this.form.value.image);
     } 
     else{
       this.isLoading= true;

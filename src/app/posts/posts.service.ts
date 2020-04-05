@@ -27,7 +27,8 @@ export class PostsService{
                         return {
                             id : post._id,
                             title : post.title,
-                            content : post.content
+                            content : post.content,
+                            imagepath : post.imagepath
                         }
                     }
                 ); 
@@ -46,14 +47,15 @@ export class PostsService{
             postData.append("content",content);
             postData.append("image",image, title);
             
-            this.http.post<{message : string, postid : string }>( backEndUrl ,postData).subscribe((x)=>{
+            this.http.post<{message : string, post : Post }>( backEndUrl ,postData).subscribe((x)=>{
                 console.log(x.message);
                 const post : Post = { 
-                    id : x.postid,
+                    id : x.post.id,
                     title : title,
-                    content : content
+                    content : content,
+                    imagepath : x.post.imagepath
                 };
-                post.id = x.postid;
+                post.id = x.post.id;
                 this.posts.push(post);
                 this.postSUpdated.next(this.posts);
                 this.router.navigate(["/"]);
@@ -64,7 +66,7 @@ export class PostsService{
         }
 
         getPost(id : string){
-            return this.http.get<{_id : string , title : string, content : string }>
+            return this.http.get<{_id : string , title : string, content : string, imagepath : string }>
             ( backEndUrl+ '/'+id);
         }
 
@@ -79,12 +81,31 @@ export class PostsService{
             });
         }
 
-        updatePost(id: string , title : string , content : string){
-            const post = { id : id , title : title, content : content };
-            this.http.put(backEndUrl+'/'+ id, post).subscribe(x => {
+        updatePost(id: string , title : string , content : string, image : File | string ){
+            let postData;
+            if( typeof(image) == 'object'){
+                postData = new FormData();
+                postData.append('id',id);
+                postData.append('title',title);
+                postData.append('content',content);
+                postData.append('image',image);
+            }else{
+                postData = {
+                    id : id,
+                    title : title,
+                    content : content,
+                    imagepath : image
+                };
+            }
+            this.http.put(backEndUrl+'/'+ id, postData).subscribe(x => {
                 console.log("Post updated  "+ id);
+                
+                
                 const updatedPost = [...this.posts];
                 const  updatedPostIndex = this.posts.findIndex( p => p.id == id);
+                
+                const post = { id : id , title : title, content : content, imagepath : '' };
+
                 updatedPost[updatedPostIndex] = post;  
                 this.posts = updatedPost;
                 this.postSUpdated.next([...this.posts]);

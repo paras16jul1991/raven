@@ -21,22 +21,30 @@ const storage = multer.diskStorage( {
     },
     filename : (req, file ,cb ) => { 
         const name = file.originalname.toLowerCase().split(' ').join('-');
-        cb(null, name + '-' +  Date.now()+ MIME_TYPE [file.mimetype] );
+        cb(null, name + '-' +  Date.now()+ '.'+ MIME_TYPE [file.mimetype] );
     }
 });
 
 router.post("", multer({ storage : storage}).single('image'),(req,res,next)=>{
-    const post =  new Post( {title : req.body.title, content : req.body.content});
+    const url = req.protocol + "://"+req.get('host');
+    const post =  new Post( {title : req.body.title
+        , content : req.body.content
+        , imagepath : url+'/images/' + req.file.filename
+    });
     console.log(post);
     post.save().then((result)=>{
         console.log(result);
-        res.status(201).json({message:"Post created successfully", postid : result._id}); 
+        res.status(201).json({message:"Post created successfully", post :{
+            id : result._id,
+            title : result.title,
+            content : result.content,
+            imagepath : result.imagepath 
+        } }); 
     });
 });
 
 
 router.get("",(req,res,next)=>{
-    console.log("Inside second middleware");
     Post.find().then((documents)=>{
         res.status(200).json({
             'message' : 'Posts fetched successfully',
@@ -75,9 +83,13 @@ router.delete('/:id', (req , res, next) => {
         });
 } );
 
-router.put('/:id', (req , res, next) => {
-
-    const post  = { _id : req.body.id ,title : req.body.title , content : req.body.content };
+router.put('/:id', multer({ storage : storage}).single('image'), (req , res, next) => {
+    let imagepath = req.body.imagepath;
+    if(req.file){
+        const url = req.protocol + "://"+req.get('host');
+        imagepath = url+'/images/' + req.file.filename;
+    }
+    const post  = { _id : req.body.id ,title : req.body.title , content : req.body.content , imagepath : imagepath};
     console.log('edit id : ',req.params.id);
     Post.updateOne( { _id : req.params.id}, post ).then( result => {
             console.log(" Update Result "+ result);    
