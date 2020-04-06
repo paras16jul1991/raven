@@ -1,0 +1,5 @@
+{
+    "env": {
+       "DB_URI" : "mongodb://admin:admin@ds031601.mlab.com:31601/heroku_cfzz6rtk"
+    }
+}

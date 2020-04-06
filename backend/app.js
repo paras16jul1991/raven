@@ -4,8 +4,7 @@ const mongoos = require('mongoose');
 const path  = require('path');
 
 const postRoutes  = require('./routes/post');
-
-mongoos.connect("mongodb://raven:raven123@ds017514.mlab.com:17514/heroku_3n6jhnlx", { useNewUrlParser: true , useUnifiedTopology: true })
+mongoos.connect(process.env.DB_URI, { useNewUrlParser: true , useUnifiedTopology: true })
 .then(()=>{ console.log('Connection established with Mongo DB')})
 .catch((e)=>{
     console.log('Connection failed ');
