@@ -19,9 +19,12 @@ export class PostsService{
         private posts : Post[] = [];
         private postSUpdated = new Subject<Post[]>();
 
-        getPosts(){
+        getPosts(postperpage : number , currentpage : number){
+            console.log(postperpage   +"  "+ currentpage );
+            const querystr = `?pagesize=${postperpage}&page=${currentpage}`;
+
             this.http.get<{message : string , posts : any }>
-            ( backEndUrl )
+            ( backEndUrl +querystr )
             .pipe( map((postdata) => {
                  return postdata.posts.map(post =>{
                         return {

@@ -45,10 +45,25 @@ router.post("", multer({ storage : storage}).single('image'),(req,res,next)=>{
 
 
 router.get("",(req,res,next)=>{
-    Post.find().then((documents)=>{
+
+    const pagesize = +req.query.pagesize;
+    const currentpage = +req.query.page;
+    const postquery = Post.find();
+
+    console.log( 'pagesize' + pagesize + "   currentpage  "+ currentpage );
+    if(pagesize && currentpage){
+        postquery.skip(pagesize * (currentpage - 1)).limit(pagesize);
+    }
+
+    let fetchedPosts;
+    postquery.then((documents)=>{
+        fetchedPosts = documents;
+        return Post.count();
+    }).then((count)=>{
         res.status(200).json({
             'message' : 'Posts fetched successfully',
-             'posts' : documents
+             'posts' : fetchedPosts,
+             'maxposts' : count
         });
     }).catch(()=>{
         console.log("No record found from Mongo");
