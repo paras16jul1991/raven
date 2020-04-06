@@ -25,15 +25,20 @@ export class PostListComponent implements OnInit , OnDestroy {
    }
  
   onDelete(id : string){
-    this.service.deletePost(id);
+    this.isLoading= true;
+    this.service.deletePost(id).subscribe(x=>{
+      this.service.getPosts(this.postperpage, this.currentpage);
+    });
   }
 
   ngOnInit(): void {
    // this.searchText = "test";
     this.isLoading= true;
     this.service.getPosts(this.postperpage,this.currentpage);
-    this.service.getPostupdateListener().subscribe((x : Post[])=> {
-      this.posts = x;
+    this.service.getPostupdateListener().subscribe((x : {posts : Post[], maxposts : number})=> {
+      this.posts = x.posts;
+      console.log("post count "+x.maxposts)
+      this.totalposts = x.maxposts;
       this.isLoading= false;
      }
     );

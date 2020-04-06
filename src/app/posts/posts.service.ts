@@ -17,29 +17,36 @@ export class PostsService{
 
 
         private posts : Post[] = [];
-        private postSUpdated = new Subject<Post[]>();
+        private postSUpdated = new Subject<{posts : Post[],maxposts : number}>();
 
         getPosts(postperpage : number , currentpage : number){
             console.log(postperpage   +"  "+ currentpage );
             const querystr = `?pagesize=${postperpage}&page=${currentpage}`;
 
-            this.http.get<{message : string , posts : any }>
+            this.http.get<{message : string , posts : any , maxposts : number}>
             ( backEndUrl +querystr )
             .pipe( map((postdata) => {
-                 return postdata.posts.map(post =>{
-                        return {
-                            id : post._id,
-                            title : post.title,
-                            content : post.content,
-                            imagepath : post.imagepath
-                        }
-                    }
-                ); 
-                }))
+               // console.log(postdata.maxposts);
+                return {
+                  posts :  postdata.posts.map((post) => {
+                         return {
+                                   id : post._id,
+                                   title : post.title,
+                                   content : post.content,
+                                   imagepath : post.imagepath
+                               } 
+                       }),
+                  maxposts : postdata.maxposts
+                }
+               }))
             .subscribe((x)=> {
               //  console.log(x.posts);
-                this.posts = x;
-                this.postSUpdated.next([...this.posts]);
+                this.posts = x.posts;
+                this.postSUpdated.next({
+                    posts : [...this.posts],
+                    maxposts : x.maxposts
+                        }
+                    );
             });
             
         }
@@ -52,15 +59,6 @@ export class PostsService{
             
             this.http.post<{message : string, post : Post }>( backEndUrl ,postData).subscribe((x)=>{
                 console.log(x.message);
-                const post : Post = { 
-                    id : x.post.id,
-                    title : title,
-                    content : content,
-                    imagepath : x.post.imagepath
-                };
-                post.id = x.post.id;
-                this.posts.push(post);
-                this.postSUpdated.next(this.posts);
                 this.router.navigate(["/"]);
             });
             
@@ -75,13 +73,7 @@ export class PostsService{
 
 
         deletePost(id : string ){
-            this.http.delete(backEndUrl + "/" + id).subscribe(()=>{
-                console.log("Post deleted  "+id);
-                const  updatedPost = this.posts.filter(x => x.id != id);
-                this.posts = updatedPost;
-                this.postSUpdated.next([...this.posts]);
-                this.router.navigate(["/"]);
-            });
+            return this.http.delete(backEndUrl + "/" + id);
         }
 
         updatePost(id: string , title : string , content : string, image : File | string ){
@@ -102,16 +94,6 @@ export class PostsService{
             }
             this.http.put(backEndUrl+'/'+ id, postData).subscribe(x => {
                 console.log("Post updated  "+ id);
-                
-                
-                const updatedPost = [...this.posts];
-                const  updatedPostIndex = this.posts.findIndex( p => p.id == id);
-                
-                const post = { id : id , title : title, content : content, imagepath : '' };
-
-                updatedPost[updatedPostIndex] = post;  
-                this.posts = updatedPost;
-                this.postSUpdated.next([...this.posts]);
                 this.router.navigate(["/"]);
             });
         }
