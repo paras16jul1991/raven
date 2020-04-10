@@ -18,6 +18,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './posts/post-list/post-list.component';
 import { FilterPipe } from "./posts/postfilter.pipe";
+import { UserLoginComponent } from './auth/user-login/user-login.component';
+import { SignUpComponent } from './auth/sign-up/sign-up.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +27,9 @@ import { FilterPipe } from "./posts/postfilter.pipe";
     PostCreateComponent,
     HeaderComponent,
     PostListComponent,
-    FilterPipe
+    FilterPipe,
+    UserLoginComponent,
+    SignUpComponent
   ],
   imports: [
     BrowserModule,

@@ -4,6 +4,7 @@ const mongoos = require('mongoose');
 const path  = require('path');
 
 const postRoutes  = require('./routes/post');
+const userRoutes  = require('./routes/user');
 mongoos.connect(process.env.DB_URI, { useNewUrlParser: true , useUnifiedTopology: true })
 .then(()=>{ console.log('Connection established with Mongo DB')})
 .catch((e)=>{
@@ -28,6 +29,8 @@ app.use((req,res,next)=>{
 
 
 app.use("/api/posts",postRoutes);
+
+app.use("/api/user",userRoutes);
 
 app.use( (req, res, next)=>{
     res.sendFile(path.join( __dirname,'raven_ui','index.html'));
