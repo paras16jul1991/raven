@@ -18,7 +18,10 @@ export class AuthService{
 
 
     login(userName : string, password : string){
-
+        const user : User =  { email : userName , password : password};
+        this.http.post<{messgae : string , result : string}>( backEndUrl+ "/login", user ).subscribe(result => {
+            console.log(result);
+        });
     }
 
     signup(userName : string, password : string){
