@@ -37,7 +37,7 @@ export class PostCreateComponent implements OnInit {
             this.postId = map.get('postId');
             this.isLoading= true;
             this.service.getPost(this.postId).subscribe( x => {
-              this.post = { id : x._id, title : x.title, content : x.content , imagepath : x.imagepath};
+              this.post = { id : x._id, title : x.title, content : x.content , imagepath : x.imagepath , creator : null};
               this.isLoading= false;
 
               this.form.setValue({

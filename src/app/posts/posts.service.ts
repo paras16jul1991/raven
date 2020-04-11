@@ -33,7 +33,8 @@ export class PostsService{
                                    id : post._id,
                                    title : post.title,
                                    content : post.content,
-                                   imagepath : post.imagepath
+                                   imagepath : post.imagepath,
+                                   creator : post.creator
                                } 
                        }),
                   maxposts : postdata.maxposts
