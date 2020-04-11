@@ -55,13 +55,17 @@ export class AuthService{
                 this.router.navigate(['/']);
             }
            
+        } , err =>{
+                this.authStatusListener.next(false);
         });
     }
 
     signup(userName : string, password : string){
         const user : User =  { email : userName , password : password};
-        this.http.post<{messgae : string , result : string}>( backEndUrl+ "/signup", user ).subscribe(result => {
-            console.log(result);
+        return this.http.post<{messgae : string , result : string}>( backEndUrl+ "/signup", user ).subscribe(()=>{
+            this.router.navigate(['/']);
+        }, err => {
+            this.authStatusListener.next(false);
         });
     }
 
