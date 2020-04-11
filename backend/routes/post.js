@@ -44,6 +44,8 @@ router.post("",checkAuth, multer({ storage : storage}).single('image'),(req,res,
             content : result.content,
             imagepath : result.imagepath
         } }); 
+    }).catch(err =>{
+        res.status(500).json({message : 'Something wrong happened'});
     });
 });
 
@@ -69,12 +71,8 @@ router.get("",(req,res,next)=>{
              'posts' : fetchedPosts,
              'maxposts' : count
         });
-    }).catch(()=>{
-        console.log("No record found from Mongo");
-        res.status(200).json({
-            'message' : 'Posts fetched successfully',
-             'posts' : [] 
-        });
+    }).catch(err =>{
+        res.status(500).json({message : 'Something wrong happened'});
     });
 
      
@@ -91,6 +89,8 @@ router.get("/:id",(req,res,next )=>{
             });
         }
         
+    }).catch(err =>{
+        res.status(500).json({message : 'Something wrong happened'});
     });
 });
 
@@ -103,6 +103,8 @@ router.delete('/:id',checkAuth, (req , res, next) => {
         }else{ 
             return res.status(401).json( { message : 'Your are not autherized to delete content' });
         } 
+    }).catch(err =>{
+        res.status(500).json({message : 'Something wrong happened'});
     });
 } );
 
@@ -121,7 +123,9 @@ router.put('/:id',checkAuth, multer({ storage : storage}).single('image'), (req 
             }else{ 
                 return res.status(401).json( { message : 'Your are not autherized to update content' });
             }
-        });
+        }).catch(err =>{
+            res.status(500).json({message : 'Something wrong happened'});
+        });;
 } );
 
 module.exports = router;
