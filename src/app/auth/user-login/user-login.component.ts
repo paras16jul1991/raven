@@ -22,6 +22,7 @@ export class UserLoginComponent implements OnInit {
 
   login(form:NgForm){
     console.log(form.value);
+    this.isLoading = true;
     this.service.login(form.value.username , form.value.password);
   }
 
