@@ -17,7 +17,7 @@ exports.postPut = (req , res, next) => {
     const post  = { _id : req.body.id ,title : req.body.title , content : req.body.content , imagepath : imagepath, creator : req.userData.userid};
     console.log('edit id : ',req.params.id);
     Post.updateOne( { _id : req.params.id , creator : req.userData.userid }, post ).then( result => {
-            if(result.nModified > 0){
+            if(result.n > 0){
                 console.log(" Update Result "+ result);    
                 return res.status(200).json( { message : 'Post updated' });
             }else{ 
