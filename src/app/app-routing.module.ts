@@ -4,12 +4,14 @@ import { PostListComponent } from "./posts/post-list/post-list.component";
 import { PostCreateComponent } from "./posts/post-create/post-create.component";
 import { AuthGaurd } from './auth/auth-gaurd';
 import { AuthRoutingModule } from './auth/auth-routing.module';
+import { FireAuthRoutingModule } from "./firehouse/fireauth-routing.module";
 
 const routes: Routes = [
   { path : '', component : PostListComponent  },
   { path : 'create', component : PostCreateComponent , canActivate : [AuthGaurd]},
   { path : 'edit/:postId', component : PostCreateComponent , canActivate : [AuthGaurd] },
-  { path : 'auth', loadChildren : () => import('./auth/auth.module').then(m => m.AuthModule) }
+  { path : 'auth', loadChildren : () => import('./auth/auth.module').then(m => m.AuthModule) },
+  { path : 'fire', loadChildren : () => import('./firehouse/fire-auth.module').then(m => m.FireAuthModule) }
 ];
 
 @NgModule({

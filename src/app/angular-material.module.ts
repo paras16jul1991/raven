@@ -7,6 +7,11 @@ import { MatExpansionModule}  from '@angular/material/expansion';
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { MatPaginatorModule } from "@angular/material/paginator";
 import { MatDialogModule } from "@angular/material/dialog";
+import { MatIconModule } from "@angular/material/icon";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   exports: [
@@ -17,7 +22,12 @@ import { MatDialogModule } from "@angular/material/dialog";
     MatExpansionModule,
     MatProgressSpinnerModule,
     MatPaginatorModule,
-    MatDialogModule
+    MatDialogModule,
+    MatIconModule,
+    MatMenuModule,
+    MatDividerModule,
+    MatTooltipModule,
+    MatSnackBarModule
   ]
 
 })

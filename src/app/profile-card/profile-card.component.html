@@ -1,0 +1,28 @@
+<button
+  mat-mini-fab
+  color="primary"
+  [matMenuTriggerFor]="beforeMenu"
+>
+  <img 
+    [alt]="user.displayName"
+    [src]="user.photoURL"
+    class="avatar" />
+</button>
+<mat-menu #beforeMenu="matMenu" xPosition="before">
+  <div class="profile-card">
+    <img 
+      [alt]="user.displayName"
+      [src]="user.photoURL" 
+      class="big-avatar" />
+    <h4>{{ user.displayName }}</h4>
+    <p>{{ user.email }}</p>
+    <mat-divider></mat-divider>
+    <button mat-stroked-button (click)="logout()">
+      Sign Out
+    </button>
+    <mat-divider></mat-divider>
+    <p class="profile-footer">
+      Made with 😻 by <a href="https://in.linkedin.com/in/paras16jul1991">@ParasSharma</a>
+    </p>
+  </div>
+</mat-menu>
