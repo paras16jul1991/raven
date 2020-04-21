@@ -1,18 +1,41 @@
 <mat-toolbar color="primary">
-<span><a routerLink="/">My Messages</a></span>
-<span class="spacer"></span>
-    <ul>
-        <li *ngIf="!isAuthenticated">
-            <a mat-button routerLink="/auth/signup" routerLinkActive="mat-accent">Sign up</a>
-        </li>
-        <li *ngIf="!isAuthenticated">
-            <a mat-button routerLink="/auth/login" routerLinkActive="mat-accent">Login</a>
-        </li>
-        <li *ngIf="isAuthenticated">
-            <a mat-button routerLink="/create" routerLinkActive="mat-accent">New post</a>
-        </li>
-        <li *ngIf="isAuthenticated">
-            <button mat-button (click)="onLogout()" >Log out </button>
-        </li>
-    </ul> 
+  <span><a routerLink="/">My Messages</a></span>
+  <span class="spacer"></span>
+  <ul>
+    <li *ngIf="!isAuthenticated">
+      <a mat-button routerLink="/auth/signup" routerLinkActive="mat-accent"
+        >Sign up</a
+      >
+    </li>
+    <li *ngIf="!isAuthenticated">
+      <a mat-button routerLink="/auth/login" routerLinkActive="mat-accent"
+        >Login</a
+      >
+    </li>
+    <li *ngIf="isAuthenticated">
+      <a mat-button routerLink="/create" routerLinkActive="mat-accent"
+        >New post</a
+      >
+    </li>
+    <li *ngIf="isAuthenticated">
+      <button mat-button (click)="onLogout()">Log out</button>
+    </li>
+  </ul>
+  <ng-container *ngIf="user$ | async as user; else loginIcon">
+    <button mat-icon-button routerLink="/create" matTooltip="Post a cute 🐱">
+      <mat-icon aria-hidden="false" aria-label="Post a cute 🐱">
+        cloud_upload
+      </mat-icon>
+    </button>
+
+    <app-profile-card [user]="user" (logoutClick)="logout()">
+    </app-profile-card>
+  </ng-container>
+  <ng-template #loginIcon>
+    <button mat-icon-button (click)="login()" matTooltip="Login">
+      <mat-icon aria-hidden="false" aria-label="Login">
+        fingerprint
+      </mat-icon>
+    </button>
+  </ng-template>
 </mat-toolbar>

@@ -11,12 +11,16 @@ import { ErrorIntercepter } from './error-intercepter';
 import { ErrorComponent } from './error/error.component';
 import { AngularMaterialModule } from './angular-material.module';
 import { PostsModule } from './posts/posts.module';
+import { ProfileCardComponent } from './profile-card/profile-card.component';
+import { AngularFireModule } from '@angular/fire';
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    ErrorComponent
+    ErrorComponent,
+    ProfileCardComponent
   ],
   imports: [
     BrowserModule,
@@ -24,7 +28,8 @@ import { PostsModule } from './posts/posts.module';
     BrowserAnimationsModule,
     HttpClientModule,
     AngularMaterialModule,
-    PostsModule 
+    PostsModule,
+    AngularFireModule.initializeApp(environment.firebase)
   ],
   providers: [{ provide : HTTP_INTERCEPTORS, useClass : AuthIntercepter, multi: true },
     { provide : HTTP_INTERCEPTORS, useClass : ErrorIntercepter, multi: true }],

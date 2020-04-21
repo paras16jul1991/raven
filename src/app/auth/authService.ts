@@ -5,6 +5,10 @@ import { map } from "rxjs/operators";
 import { environment }  from "../../environments/environment";
 import { Router } from '@angular/router';
 import { User } from './user.model';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { BehaviorSubject, from, Observable } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { auth } from 'firebase/app';
  
 const backEndUrl = environment.apiUrl +'/user';
 
@@ -16,10 +20,25 @@ export class AuthService{
     private tokenTimer : any;
     private userId : string;
 
+    private user: BehaviorSubject<Observable<firebase.User>> = new BehaviorSubject<Observable<firebase.User>>(null);
+
+    user$ = this.user
+    .asObservable()
+    .pipe(switchMap((user: Observable<firebase.User>) => user));
+
+
+  loginViaGoogle(): Observable<auth.UserCredential> {
+    return from(this.afAuth.signInWithPopup(new auth.GoogleAuthProvider()));
+  }
+
+  logout(): Observable<void> {
+    return from(this.afAuth.signOut());
+  }
+
     private authStatusListener = new Subject<boolean>();
 
-    constructor(private http : HttpClient ,public router : Router){
-            
+    constructor(private http : HttpClient ,public router : Router,private afAuth: AngularFireAuth){
+        this.user.next(this.afAuth.authState);
     }
 
     getToken(){
