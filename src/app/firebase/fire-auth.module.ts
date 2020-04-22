@@ -1,15 +1,18 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from './header/header.component';
+import { SidemenuComponent } from './sidemenu/sidemenu.component';
 import { FireAuthComponent } from './fire-auth.component';
 import { FireAuthRoutingModule } from "./fireauth-routing.module";
+import { AngularMaterialModule } from '../angular-material.module';
+import { ClusterComponent } from './cluster/cluster.component';
 
 
 @NgModule({
-  declarations: [HeaderComponent, FireAuthComponent],
+  declarations: [SidemenuComponent, FireAuthComponent, ClusterComponent],
   imports: [
     CommonModule,
-    FireAuthRoutingModule
+    FireAuthRoutingModule,
+    AngularMaterialModule,
   ],
   bootstrap : [FireAuthComponent]
 })
